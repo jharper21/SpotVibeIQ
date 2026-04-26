@@ -12,7 +12,7 @@ jobs:
   shuffle:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
 
     steps:
       - name: Checkout Code
@@ -42,3 +42,18 @@ jobs:
           VIBE_4_ID: ${{ secrets.VIBE_4_ID }}
           VIBE_5_ID: ${{ secrets.VIBE_5_ID }}
         run: python scripts/main_shuffle.py
+
+      - name: Commit Playback History
+        run: |
+          git config --global user.name 'Music-Bot'
+          git config --global user.email 'bot@noreply.github.com'
+
+          git add play_log.json history.json
+
+          if git diff --staged --quiet; then
+            echo "No playback history changes detected. Skipping commit."
+          else
+            git commit -m "Update playback history [skip ci]"
+            git pull --rebase origin main
+            git push origin main
+          fi

@@ -14,9 +14,11 @@ Weekly Intelligence Sync
 
 Daily Vibe Shuffle
   1. Reads current_themes.json.
-  2. Updates MASTER_SHUFFLE_ID with up to 1,000 shuffled tracks.
-  3. Updates VIBE_1_ID through VIBE_5_ID with up to 50 tracks each.
-  4. Renames vibe playlists in Spotify.
+  2. Reads the current user's recently played tracks from Spotify.
+  3. Adds actually played tracks to a 30-day cooldown.
+  4. Updates MASTER_SHUFFLE_ID with up to 1,000 shuffled tracks, pushing cooldown tracks to the end.
+  5. Updates VIBE_1_ID through VIBE_5_ID with up to 50 tracks each.
+  6. Renames vibe playlists in Spotify.
 ```
 
 ## Project Structure
@@ -80,3 +82,5 @@ python scripts/main_shuffle.py
 - `OPENAI_MODEL` is optional. If unset, `scripts/intel_sync.py` uses `gpt-4o-mini`.
 - `SYNC_SAMPLE_LIMIT` is optional. If unset, the weekly sync samples 1,000 tracks.
 - Weekly theme discovery asks OpenAI for five distinct playlist lanes across mood, tempo, era, instrumentation, and listening context.
+- Cooldown only applies to tracks Spotify reports as actually played. Playlist placement alone does not put a song on cooldown.
+- The Spotify refresh token must include `user-read-recently-played` for cooldown updates.

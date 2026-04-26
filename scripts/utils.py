@@ -14,7 +14,8 @@ SPOTIFY_SCOPE = (
     "playlist-read-private "
     "playlist-modify-public "
     "playlist-modify-private "
-    "user-library-read"
+    "user-library-read "
+    "user-read-recently-played"
 )
 SPOTIFY_PAGE_LIMIT = 50
 LIKED_SONGS_ALIASES = {
@@ -57,7 +58,7 @@ def get_sp():
         cache_handler=MemoryCacheHandler(token_info=token_info),
         open_browser=False,
     )
-    return spotipy.Spotify(auth_manager=auth_manager)
+    return spotipy.Spotify(auth_manager=auth_manager, requests_timeout=15, retries=3)
 
 
 def load_json(path, default=None):
