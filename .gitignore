@@ -1,0 +1,31 @@
+# --- Security & Secrets (CRITICAL) ---
+.env
+.cache
+.cache-*
+*.tokens
+.netrc
+track_cache.json
+
+# --- Python / Environment ---
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+build/
+dist/
+*.egg-info/
+
+# --- VS Code ---
+.vscode/
+*.code-workspace
+.history/
+
+# --- Windows System Files ---
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+*.lnk

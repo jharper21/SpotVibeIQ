@@ -1,0 +1,49 @@
+name: Intelligence and Genre Sync
+on:
+  schedule:
+    # Runs Sundays at 08:00 UTC, before the daily shuffle.
+    - cron: '0 8 * * 0'
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions: { contents: write }
+    timeout-minutes: 60 
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run OpenAI Intelligence
+        env:
+          SPOTIPY_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          SPOTIPY_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          SPOTIPY_REDIRECT_URI: http://127.0.0.1:8888/callback
+          SPOTIFY_REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ARCHIVE_PLAYLIST_ID: ${{ secrets.ARCHIVE_PLAYLIST_ID }}
+        run: python scripts/intel_sync.py
+
+      - name: Commit and Push State
+        run: |
+          git config --global user.name 'Intelligence-Bot'
+          git config --global user.email 'bot@noreply.github.com'
+
+          git add current_themes.json
+
+          if git diff --staged --quiet; then
+            echo "No state changes detected. Skipping commit."
+          else
+            git commit -m "Sync AI State [skip ci]"
+            git pull --rebase origin main
+            git push origin main
+          fi

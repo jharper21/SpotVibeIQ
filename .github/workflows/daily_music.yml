@@ -1,0 +1,44 @@
+name: Daily Vibe Shuffle
+on:
+  schedule:
+    # Runs at 10:00 UTC (3:00 AM PDT) every day
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  shuffle:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Daily Shuffle
+        env:
+          # Auth Credentials
+          SPOTIPY_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          SPOTIPY_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          SPOTIPY_REDIRECT_URI: http://127.0.0.1:8888/callback
+          SPOTIFY_REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+          
+          # Target Playlists
+          MASTER_SHUFFLE_ID: ${{ secrets.MASTER_SHUFFLE_ID }}
+          VIBE_1_ID: ${{ secrets.VIBE_1_ID }}
+          VIBE_2_ID: ${{ secrets.VIBE_2_ID }}
+          VIBE_3_ID: ${{ secrets.VIBE_3_ID }}
+          VIBE_4_ID: ${{ secrets.VIBE_4_ID }}
+          VIBE_5_ID: ${{ secrets.VIBE_5_ID }}
+        run: python scripts/main_shuffle.py
