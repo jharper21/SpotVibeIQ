@@ -1,6 +1,6 @@
-# SpotShuffle
+# SpotVibeIQ
 
-SpotShuffle samples a large Spotify archive playlist, uses OpenAI to discover five current listening themes, and updates one master shuffle playlist plus five rotating vibe playlists from GitHub Actions.
+SpotVibeIQ samples a large Spotify archive playlist, uses OpenAI to discover five current listening themes, and updates one master shuffle playlist plus five rotating vibe playlists from GitHub Actions.
 
 ## How It Runs
 
