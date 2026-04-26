@@ -22,7 +22,7 @@ Daily Vibe Shuffle
 ## Project Structure
 
 ```text
-SpotShuffle/
+SpotVibeIQ/
 |-- .github/workflows/
 |   |-- intel_sync.yml      # Weekly OpenAI theme discovery
 |   `-- daily_music.yml     # Daily Spotify playlist updates
